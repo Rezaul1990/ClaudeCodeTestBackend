@@ -6,7 +6,8 @@ export const signupSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   email: z.string().email(),
-  password: z.string().min(6)
+  password: z.string().min(6),
+  role: z.enum(['admin', 'manager', 'staff']).default('staff')
 });
 
 export const signinSchema = z.object({
@@ -26,7 +27,8 @@ export const register = async (data: SignupData) => {
     firstName: data.firstName,
     lastName: data.lastName,
     email: data.email,
-    passwordHash
+    passwordHash,
+    role: data.role || 'staff'
   });
 
   await user.save();
@@ -34,7 +36,8 @@ export const register = async (data: SignupData) => {
     id: String(user._id),
     firstName: user.firstName,
     lastName: user.lastName,
-    email: user.email
+    email: user.email,
+    role: user.role
   };
 };
 
@@ -48,7 +51,8 @@ export const login = async (data: SigninData) => {
     id: String(user._id),
     firstName: user.firstName,
     lastName: user.lastName,
-    email: user.email
+    email: user.email,
+    role: user.role
   };
 };
 
